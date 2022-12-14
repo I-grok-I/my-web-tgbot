@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './ProductList.css';
-import ProductItem from '../ProductItem/ProductItem';
-import { useTelegram } from '../hooks/useTelegram';
-
+import ProductItem from "../ProductItem/ProductItem";
+import {useTelegram} from "../hooks/useTelegram";
+import {useCallback, useEffect} from "react";
 
 const products = [
     {id: '1', title: 'Джинсы', price: 5000, description: 'Синего цвета, прямые'},
@@ -15,7 +15,7 @@ const products = [
     {id: '8', title: 'Куртка 5', price: 12000, description: 'Зеленого цвета, теплая'},
 ]
 
-const getTotalPrice = (items = []) => { //calculate total price
+const getTotalPrice = (items = []) => {
     return items.reduce((acc, item) => {
         return acc += item.price
     }, 0)
@@ -59,7 +59,7 @@ const ProductList = () => {
 
         setAddedItems(newItems)
 
-        if(newItems.length === 0) { //если корзина пустая - то скрываем кнопку, так как покупать нечего
+        if(newItems.length === 0) {
             tg.MainButton.hide();
         } else {
             tg.MainButton.show();
