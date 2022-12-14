@@ -3,6 +3,7 @@ import './Form.css';
 import {useTelegram} from "../hooks/useTelegram";
 
 const Form = () => {
+    const [Name, setName] = useState('');
     const [country, setCountry] = useState('');
     const [street, setStreet] = useState('');
     const [subject, setSubject] = useState('physical');
@@ -10,12 +11,13 @@ const Form = () => {
 
     const onSendData = useCallback(() => {
         const data = {
+            Name,
             country,
             street,
             subject
         }
         tg.sendData(JSON.stringify(data));
-    }, [country, street, subject])
+    }, [Name, country, street, subject])
 
     useEffect(() => {
         tg.onEvent('mainButtonClicked', onSendData)
@@ -31,12 +33,16 @@ const Form = () => {
     }, [])
 
     useEffect(() => {
-        if(!street || !country) {
+        if(!street || !country || !Name) {
             tg.MainButton.hide();
         } else {
             tg.MainButton.show();
         }
-    }, [country, street])
+    }, [Name, country, street])
+
+    const onChangeName = (e) => {
+        setName(e.target.value);
+    }
 
     const onChangeCountry = (e) => {
         setCountry(e.target.value)
@@ -53,6 +59,13 @@ const Form = () => {
     return (
         <div className={"form"}>
             <h3>Введите ваши данные</h3>
+            <input
+                className={'input'}
+                type="text"
+                placeholder={'Имя и фамилия'}
+                value={Name}
+                onChange={onChangeName}
+            />
             <input
                 className={'input'}
                 type="text"
